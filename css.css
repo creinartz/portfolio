@@ -1,0 +1,16 @@
+body {
+    padding: 40px;
+    margin: 0 auto;
+}
+
+a {
+    width: 23%;
+    margin: 20px 2% 0 0;
+    padding-bottom: 23%;
+    float:left;
+    overflow:hidden;
+}
+
+img {
+    max-width: 100%;
+}
