@@ -20,7 +20,7 @@ body {
 }
 
 /* this positions content in the link containers */
-div {
+.tile div {
 	position:absolute;
 }
 
@@ -35,9 +35,19 @@ img {
     max-width: 100%;
 }
 
+
+.links {
+    position:absolute;
+    top:0;
+    right:0;
+    width:68%;
+}
+
+
+
 /*** Media Queries ***/
 /* Two Column */
-a, a:link, a:visited, a:active, .tile {
+.tile {
 	float:left;
 	position: relative;
 	top: 0;
@@ -47,9 +57,23 @@ a, a:link, a:visited, a:active, .tile {
 	padding-bottom: 32%;
 }
 
+@media screen and (min-width:760px) {
+    .links {
+        width:auto;
+        top:20px;
+        right:20px;
+    }
+}
+@media screen and (min-width:1200px) {
+    .links {
+        top:20px;
+        right:60px;
+    }
+}
+
 /* Three Column */
 @media screen and (min-width:1000px) {
-	.tile, a, a:link, a:visited, a:hover, a:active {
+	.tile {
 		width: 31%;
 		margin: 20px 2% 0 0;
 		padding-bottom: 21%;
@@ -58,7 +82,7 @@ a, a:link, a:visited, a:active, .tile {
 
 /* Four Column */
 @media screen and (min-width:1400px) {
-	.tile, a, a:link, a:visited, a:hover, a:active {
+	.tile {
 		width: 23%;
 		margin: 20px 2% 0 0;
 		padding-bottom: 16%;
@@ -66,48 +90,31 @@ a, a:link, a:visited, a:active, .tile {
 }
 
 /* Font Size Control Media Queries */
-@media screen and (min-width:500px) {
-	h1, h2, h3 { font-size: 2em; }
-	p { font-size: 1em; line-height: 1.2; }
-}
-@media screen and (min-width:600px) {
-	h1, h2, h3 { font-size: 2.5em; }
-}
+h1, h2, h3 { font-size: 2em; }
+p, a { font-size: 1em; line-height: 1.2; }
+
 @media screen and (min-width:700px) {
 	h1, h2, h3 { font-size: 3em; }
-	p { font-size: 1.25em; }
+	p, a { font-size: 1.25em; }
+    .links a { font-size:1em;}
 }
-@media screen and (min-width:800px) {
-	h1, h2, h3 { font-size: 2.5em; }
-	p { font-size: 1em; }
+@media screen and (min-width:900px) {
+    .links a { font-size:1.4em;}
 }
 @media screen and (min-width:1000px) {
 	h1, h2, h3 { font-size: 3.25em; }
-	p { font-size: 1.25em; }
+	p, a { font-size: 1.25em; }
+    .links a { font-size:1.4em;}
 }
 @media screen and (min-width:1200px) {
-	p { font-size: 1em; }
+    .links a { font-size:1.6em;}
 }
-@media screen and (min-width:1400px) {
-	p { font-size: 1.25em; }
-}
-@media screen and (min-width:1600px) {
-	h1, h2, h3 { font-size: 4em; }
-}
-
 
 /*** general ***/
-.cf:before, .cf:after {
-	content:" ";
-    display:table;
-}
-.cf:after {
-    clear:both;
-}
-
 .header {
 	display:block;
 	position:relative;
+    width:100%;
 }
 
 h1 {
@@ -115,6 +122,31 @@ h1 {
 	float:left;
 }
 
-a:hover, a:active {
-	outline: none;
+h1 a, h1 a:link, h1 a:visited, h1 a:active {
+    color:#000000;
+}
+
+.links a {
+    padding-right: 10px;
+    float:right;
+    color:#9C9C9C;
+    font-weight:lighter;
+}
+
+a, a:link, a:visited, a:active {
+    color:#666;
+    text-decoration:none;
+}
+
+a:hover {
+	color:#111;
+    text-decoration:none;
+}
+
+.cf:before, .cf:after {
+	content:" ";
+    display:table;
+}
+.cf:after {
+    clear:both;
 }
