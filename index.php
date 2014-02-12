@@ -5,8 +5,10 @@ if(!file_exists($conf))
     die('missing config file!');
 
 include($conf);
+include('./functions.php');
 
 $content_dir = getProperty('content_dir');
+$images = readConfFile($content_dir . getProperty('images'));
 
 ?>
 <html>
