@@ -1,3 +1,10 @@
+<?php
+$conf = './conf.php';
+if(!file_exists($conf))
+    die('missing config file!');
+
+include($conf);
+?>
 <html>
 <head>
     <title>janvt</title>
