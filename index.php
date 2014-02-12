@@ -1,9 +1,13 @@
 <?php
+
 $conf = './conf.php';
 if(!file_exists($conf))
     die('missing config file!');
 
 include($conf);
+
+$content_dir = getProperty('content_dir');
+
 ?>
 <html>
 <head>
