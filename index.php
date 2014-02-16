@@ -47,16 +47,17 @@ $data = array(
 <body>
     <div class="header cf">
         <h1><a href="http://janvt.com">janvt</a></h1>
-        <div class="links">
-            <a href="#">| CONTACT</a>
-            <a href="#">| BLOG</a>
-            <a href="#">EVENT</a>
-            <a href="#">OUTDOOR</a>
-            <a href="#">STUDIO</a>
-            <a href="#">PORTRAIT</a>
+        <div id="links">
+            <a href="#" class="contact" data-state="contact">| CONTACT</a>
+            <a href="#" class="blog" data-state="blog">| BLOG</a>
+            <a href="#" class="event" data-state="event">EVENT</a>
+            <a href="#" class="outdoor" data-state="outdoor">OUTDOOR</a>
+            <a href="#" class="studio" data-state="studio">STUDIO</a>
+            <a href="#" class="portrait" data-state="portrait">PORTRAIT</a>
         </div>
     </div>
     
+    <div id="content"></div>
     <!--a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
     <a class="tile" href="#"><div><p>test text</p></div></a>
     <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
