@@ -115,6 +115,7 @@ p, a { font-size: 1em; line-height: 1.2; }
 	display:block;
 	position:relative;
     width:100%;
+    margin-bottom:10px;
 }
 
 h1 {
@@ -141,6 +142,10 @@ a, a:link, a:visited, a:active {
 a:hover {
 	color:#111;
     text-decoration:none;
+}
+
+.article {
+    border-top:1px solid #9C9C9C;
 }
 
 .cf:before, .cf:after {

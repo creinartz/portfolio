@@ -1,7 +1,6 @@
 ;(function(global, $, _, Backbone)
 {
     /*** models ***/
-    var StateModel = Backbone.Model;
     var ImageModel = Backbone.Model.extend({
         defaults: {
             url: ''
@@ -9,6 +8,20 @@
             , category: ''
             , title: ''
             , description: ''
+            , cssClass: 'image'
+        }
+
+        , initialize: function()
+        {
+            this.set('cssClass', this.get('cssClass') + ' ' + this.get('category'));
+        }
+    });
+
+    var ArticleModel = Backbone.Model.extend({
+        defaults: {
+            title: ''
+            , text: ''
+            , cssClass: 'article'
         }
     });
     
@@ -49,6 +62,7 @@
             this.options.$appendTo.append(this.options.tileTemplate({
                 href: '#'
                 , content: this.template(this.model.toJSON())
+                , cssClass: this.model.get('cssClass')
             }));
         }
     });
@@ -71,11 +85,29 @@
         }
     });
 
+    var ArticleView = TileView.extend({
+        template: _.template('<h2><%= title %></h2><p><%= text %></p>')
+
+        , events: {
+            'click .tile': 'onClick'
+        }
+
+        , initialize: function(options)
+        {
+            this.options = _.extend({}, options);
+            this.render();
+        }
+
+        , onClick: function()
+        {
+        }
+    });
+
     /*** state handling ***/
     function onStateChange(model, state)
     {
         destroyViews();
-        $content.empty(); // @todo views should remove themselves
+        $content.empty();
 
         switch(state)
         {
@@ -84,7 +116,10 @@
             case 'outdoor':
             case 'event':
                 showImageCategory(state);
+                break;
 
+            case 'blog':
+                showArticles();
                 break;
 
             default:
@@ -102,33 +137,43 @@
         views = [];
     }
 
+    function showArticles()
+    {
+        articles.each(function(model)
+        {
+            addView(model, ArticleView);
+        });
+    }
+
     function showImageCategory(category)
     {
-        var _filteredImages = images.where({ category: category })
+        var _filteredImages = images.where({ category: category });
         _.each(_filteredImages, function(model) {
-            views.push(new ImageView({
-                model: model
-                , $appendTo: $content
-                , tileTemplate: tileTemplate
-            }));
+            addView(model, ImageView);
         });
     }
 
     function showOverview()
     {
         images.each(function(model) {
-            views.push(new ImageView({
-                model: model
-                , $appendTo: $content
-                , tileTemplate: tileTemplate
-            }));
+            addView(model, ImageView);
         });
+    }
+
+    function addView(model, View)
+    {
+        views.push(new View({
+            model: model
+            , $appendTo: $content
+            , tileTemplate: tileTemplate
+        }));
     }
     
     /*** ***/
-    var state = new StateModel({ state: 'overview' })
-        , tileTemplate = _.template('<a class="tile" href="<%= href %>"><div><%= content %></div></a>')
+    var state = new Backbone.Model({ state: 'overview' })
+        , tileTemplate = _.template('<a class="tile <%= cssClass %>" href="<%= href %>"><div><%= content %></div></a>')
         , images = new (Backbone.Collection.extend({ model: ImageModel }))
+        , articles = new (Backbone.Collection.extend({ model: ArticleModel }))
         , $content
         , views = []
     ;
@@ -136,10 +181,8 @@
     function init()
     {
         var data = global.lovelyData;
-        if(data.images)
-        {
-            images.add(data.images);
-        }
+        images.add(data.images);
+        articles.add(data.articles);
 
         $content  = $('#content');
 

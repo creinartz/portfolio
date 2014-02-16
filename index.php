@@ -24,8 +24,19 @@ foreach($images as $image)
     );
 }
 
+$articles = readConfFile($contentDir . getProperty('articlesData'));
+$articlesJSON = array();
+foreach($articles as $article)
+{
+    $articlesJSON[] = array(
+        'title' => $article[0],
+        'text' => $article[1],
+    );
+}
+
 $data = array(
-    'images' => $imagesJSON
+    'images' => $imagesJSON,
+    'articles' => $articlesJSON
 );
 
 ?>
