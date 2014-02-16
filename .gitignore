@@ -4,3 +4,7 @@ conf.php
 images
 thumbs
 portfolio_content
+
+*.iml
+
+.idea/.name
