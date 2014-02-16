@@ -1,5 +1,6 @@
 conf.php
 *.xml
+*.swp
 images
 thumbs
 portfolio_content
