@@ -7,8 +7,26 @@ if(!file_exists($conf))
 include($conf);
 include('./functions.php');
 
-$content_dir = getProperty('content_dir');
-$images = readConfFile($content_dir . getProperty('images'));
+$contentDir = getProperty('contentDir');
+
+$images = readConfFile($contentDir . getProperty('imagesData'));
+$imagesJSON = array();
+$imageBaseUrl = getProperty('imageBaseUrl');
+$imageThumbBaseUrl = getProperty('imageThumbBaseUrl');
+foreach($images as $image)
+{
+    $imagesJSON[] = array(
+        'url' => $imageBaseUrl . $image[0],
+        'thumbUrl' => $imageThumbBaseUrl . $image[1],
+        'category' => $image[2],
+        'title' => $image[3],
+        'description' => $image[4]
+    );
+}
+
+$data = array(
+    'images' => $imagesJSON
+);
 
 ?>
 <html>
@@ -39,19 +57,13 @@ $images = readConfFile($content_dir . getProperty('images'));
         </div>
     </div>
     
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
+    <!--a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
     <a class="tile" href="#"><div><p>test text</p></div></a>
     <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
     <a class="tile" href="#"><div><h2>link title</h2><p>lots more test text</p></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
+    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a-->
+        
+    <script type="text/javascript">var lovelyData = <?php print json_encode($data); ?>;</script>
     
 </body>
 </html>
