@@ -59,11 +59,20 @@
 
         , render: function()
         {
-            this.options.$appendTo.append(this.options.tileTemplate({
+            var _$node = $(this.options.tileTemplate({
                 href: '#'
                 , content: this.template(this.model.toJSON())
                 , cssClass: this.model.get('cssClass')
             }));
+
+            this.options.$appendTo.append(_$node);
+
+            this.setElement(_$node);
+            this.$el.fadeTo(900, 0.9, function()
+            {
+                _$node.removeClass('hidden');
+                _$node.removeAttr('style');
+            });
         }
     });
 
@@ -106,9 +115,24 @@
     /*** state handling ***/
     function onStateChange(model, state)
     {
-        destroyViews();
-        $content.empty();
+        var _tiles = $content.find('.tile');
+        if(_tiles.length > 0)
+        {
+            _tiles.fadeOut(300, function()
+            {
+                destroyViews();
+                $content.empty();
+                displayContent(state);
+            });
+        }
+        else
+        {
+            displayContent(state);
+        }
+    }
 
+    function displayContent(state)
+    {
         switch(state)
         {
             case 'portrait':
@@ -155,6 +179,7 @@
 
     function showOverview()
     {
+        images.reset(images.shuffle(), { silent: true });
         images.each(function(model) {
             addView(model, ImageView);
         });
@@ -171,7 +196,7 @@
     
     /*** ***/
     var state = new Backbone.Model({ state: 'overview' })
-        , tileTemplate = _.template('<a class="tile <%= cssClass %>" href="<%= href %>"><div><%= content %></div></a>')
+        , tileTemplate = _.template('<a class="tile hidden <%= cssClass %>" href="<%= href %>"><div><%= content %></div></a>')
         , images = new (Backbone.Collection.extend({ model: ImageModel }))
         , articles = new (Backbone.Collection.extend({ model: ArticleModel }))
         , $content

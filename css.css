@@ -35,8 +35,7 @@ img {
     max-width: 100%;
 }
 
-
-.links {
+#links {
     position:absolute;
     top:0;
     right:0;
@@ -137,15 +136,26 @@ h1 a, h1 a:link, h1 a:visited, h1 a:active {
 a, a:link, a:visited, a:active {
     color:#666;
     text-decoration:none;
+    opacity:0.9;
 }
 
 a:hover {
 	color:#111;
     text-decoration:none;
+    opacity:1;
+    -webkit-transition: opacity 0.2s ease-in-out;
+    -moz-transition: opacity 0.2s ease-in-out;
+    -ms-transition: opacity 0.2s ease-in-out;
+    -o-transition: opacity 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .article {
     border-top:1px solid #9C9C9C;
+}
+
+.tile.hidden {
+    opacity:0; /* displayed via JS when content has loaded */
 }
 
 .cf:before, .cf:after {
