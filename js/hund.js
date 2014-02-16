@@ -72,12 +72,21 @@
     });
 
     /*** state handling ***/
-    function onStateChange(state)
+    function onStateChange(model, state)
     {
         destroyViews();
+        $content.empty(); // @todo views should remove themselves
 
         switch(state)
         {
+            case 'portrait':
+            case 'studio':
+            case 'outdoor':
+            case 'event':
+                showImageCategory(state);
+
+                break;
+
             default:
                 showOverview();
         }
@@ -89,27 +98,39 @@
         {
             view.destroy();
         });
+
+        views = [];
+    }
+
+    function showImageCategory(category)
+    {
+        var _filteredImages = images.where({ category: category })
+        _.each(_filteredImages, function(model) {
+            views.push(new ImageView({
+                model: model
+                , $appendTo: $content
+                , tileTemplate: tileTemplate
+            }));
+        });
     }
 
     function showOverview()
     {
         images.each(function(model) {
-            // jvt: @todo destroy views?
-            new ImageView({
+            views.push(new ImageView({
                 model: model
                 , $appendTo: $content
                 , tileTemplate: tileTemplate
-            });
+            }));
         });
     }
     
     /*** ***/
-    // set up underscore templates to use {{ }}
     var state = new StateModel({ state: 'overview' })
         , tileTemplate = _.template('<a class="tile" href="<%= href %>"><div><%= content %></div></a>')
         , images = new (Backbone.Collection.extend({ model: ImageModel }))
         , $content
-        , views = {}
+        , views = []
     ;
 
     function init()
@@ -127,8 +148,15 @@
             , model: state
         });
 
+        $('#janvt').on('click', function(e)
+        {
+            state.set('state', 'overview');
+            e.preventDefault();
+        });
+
         // jvt: display initial content
-        onStateChange(state.get('state'));
+        onStateChange(null, state.get('state'));
+        state.on('change:state', onStateChange);
     }
     
     // jvt: run init on document ready

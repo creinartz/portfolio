@@ -46,7 +46,7 @@ $data = array(
 
 <body>
     <div class="header cf">
-        <h1><a href="http://janvt.com">janvt</a></h1>
+        <h1><a href="http://janvt.com" id="janvt">janvt</a></h1>
         <div id="links">
             <a href="#" class="contact" data-state="contact">| CONTACT</a>
             <a href="#" class="blog" data-state="blog">| BLOG</a>
