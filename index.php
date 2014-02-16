@@ -36,8 +36,8 @@ $images = readConfFile($content_dir . getProperty('images'));
             <a href="#">| CONTACT</a>
             <a href="#">| BLOG</a>
             <a href="#">EVENT</a>
-            <a href="#">CONCERT</a>
             <a href="#">OUTDOOR</a>
+            <a href="#">STUDIO</a>
             <a href="#">PORTRAIT</a>
         </div>
     </div>
