@@ -99,7 +99,7 @@
     });
 
     var ArticleTileView = TileView.extend({
-        template: _.template('<h2><%= title %></h2><p><%= text %></p>')
+        template: _.template('<h4><%= title %></h4><p><%= text %></p>')
 
         , initialize: function(options)
         {
@@ -113,15 +113,17 @@
         {
             this.options = _.extend({}, options);
             this.load();
+            $content.addClass('article');
         }
 
         , load: function()
         {
+            // jvt:
             $.ajax({
                 url: this.model.get('htmlSrc')
                 , success: function(html)
                 {
-                    console.debug('load success', arguments);
+                    //console.debug('load success', arguments);
                     this.$el.html(html);
                 }
             });
@@ -129,6 +131,7 @@
 
         , destroy: function()
         {
+            $content.removeClass('article');
             this.unbind();
             this.$el.empty();
         }
@@ -237,7 +240,7 @@
                 // jvt: explicitely call change state event
                 onStateChange(null, 'blog');
             }
-            /*else
+            /*else // jvt: @todo
             {
                 showArticle(url);
             }*/
@@ -268,6 +271,12 @@
         }
     }
 
+    function setContentClasses(newClasses)
+    {
+        $content.removeAttr('class');
+        $content.addClass(newClasses);
+    }
+
     function destroyViews()
     {
         _.each(views, function(view)
@@ -282,6 +291,7 @@
     {
         if(!options.pageLoad)
         {
+            setContentClasses('contact');
             views.push(new ContactView({
                 el: $content
                 , html: contactHtml
@@ -302,7 +312,8 @@
         else
         {
             // jvt: invalid article URL, just reload page
-            console.error('invalid url: ' + url);
+            // jvt: @todo
+            //console.error('invalid url: ' + url);
             //location.reload(true);
         }
     }
@@ -311,6 +322,7 @@
     {
         if((options.pageLoad && !State.get('url')) || !options.pageLoad)
         {
+            setContentClasses('blog');
             articles.each(function(model)
             {
                 addView(model, ArticleTileView);
@@ -320,6 +332,7 @@
 
     function showImageCategory(category)
     {
+        setContentClasses(category);
         var _filteredImages = images.where({ category: category });
         _.each(_filteredImages, function(model) {
             addView(model, ImageTileView);
@@ -328,6 +341,7 @@
 
     function showOverview()
     {
+        setContentClasses('overview');
         images.reset(images.shuffle(), { silent: true });
         images.each(function(model) {
             addView(model, ImageTileView);

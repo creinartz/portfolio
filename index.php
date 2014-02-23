@@ -53,9 +53,16 @@ foreach($articles as $article)
     );
 }
 
+
 if(!empty($url) && !empty($blogHtmlFile) && file_exists($blogHtmlFile)) // jvt: check for valid blog content
 {
     $state = 'blog';
+}
+
+$contentClasses = $state;
+if(!empty($blogHtmlFile))
+{
+    $contentClasses .= ' article';
 }
 
 $data = array(
@@ -84,6 +91,7 @@ $data = array(
 </head>
 
 <body>
+    <a href="#top"></a>
     <div class="header cf">
         <h1><a href="http://janvt.com" id="janvt">jan vt</a></h1>
         <div id="links">
@@ -96,7 +104,7 @@ $data = array(
         </div>
     </div>
     
-    <div id="content" class="<?php print $state; ?>">
+    <div id="content" class="<?php print $contentClasses; ?>">
         <?php
             // jvt: render indexable shit for SE-fuckin-O OPTIMI-fuckin-ZATION, motherfucker!
             switch($state)

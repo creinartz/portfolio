@@ -43,8 +43,6 @@ img {
     width:68%;
 }
 
-#content {}
-
 /*** Media Queries ***/
 /* Two Column */
 .tile {
@@ -90,14 +88,14 @@ img {
 }
 
 /* Font Size Control Media Queries */
-h1, h2, h3 { font-size: 2em; }
+h1, h2, h3, h4 { font-size: 2em; }
 p, a { font-size: 1em; line-height: 1.2; }
 
 @media screen and (min-width:600px) {
     h1 { font-size: 3em; }
 }
 @media screen and (min-width:700px) {
-    h2, h3 { font-size: 3em; }
+    h4 { font-size: 2em; }
 	p, a { font-size: 1.25em; }
     #links a { font-size:1em;}
 }
@@ -105,7 +103,7 @@ p, a { font-size: 1em; line-height: 1.2; }
     #links a { font-size:1.4em;}
 }
 @media screen and (min-width:1000px) {
-	h1, h2, h3 { font-size: 3.25em; }
+	h1 { font-size: 3.25em; }
 	p, a { font-size: 1.25em; }
     #links a { font-size:1.4em;}
 }
@@ -161,7 +159,7 @@ a:hover {
     transition: opacity 0.2s ease-in-out;
 }
 
-.article {
+.tile.article {
     border-top:1px solid #9C9C9C;
 }
 
@@ -183,6 +181,7 @@ a:hover {
     clear:both;
 }
 
+/*** contact page ***/
 #contact {
     padding: 60px 0 0 10%;
 }
@@ -209,3 +208,62 @@ a:hover {
 #contact a.instagram { color: #517fA4; }
 #contact a.mk { color: rgb(96, 24, 28); }
 #contact a.soundcloud { color: rgb(255, 119, 0); }
+
+/*** blog articles ***/
+#content.blog.article {
+    padding: 40px 20px;
+}
+
+#content.blog.article h2, #content.blog.article h3 {
+    display:block;
+}
+
+.blog_subtitle {
+    font-size:24px;
+    color:#999;
+    padding:2% 0 2% 3%;
+}
+
+.equipment {
+    font-style:italic;
+    color:#666;
+    padding:0 0 2% 3%;
+}
+
+/*#content.blog.article img {
+    margin: 5% 0;
+}*/
+
+.image_group {
+    margin:5% 0;
+    width:100%;
+}
+
+.multi_img {
+    width:100%;
+}
+#content.blog.article .multi_img img {
+    margin:0 1% 1% 0;
+}
+#content.blog.article .multi_img img.nr1 {
+    margin-top:1%;
+}
+#content.blog.article .multi_img.col2 img {
+    width:48%;
+}
+#content.blog.article .multi_img.col3 img {
+    width:32%;
+}
+
+#content.blog.article img.title_image {
+    margin-top:0;
+}
+
+#content.blog.article p {
+    padding-top: 10px;
+}
+#content.blog.article p, #content.blog.article a {
+    font-family: Helvetica;
+    font-size:16px;
+    line-height:32px;
+}
