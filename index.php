@@ -49,7 +49,9 @@ $data = array(
     'state' => $state,
     'url' => $url,
     'images' => $imagesJSON,
-    'articles' => $articlesJSON
+    'articles' => $articlesJSON,
+
+    'contactContent' => file_get_contents(getProperty('contactContentURL'))
 );
 
 ?>
@@ -81,7 +83,17 @@ $data = array(
         </div>
     </div>
     
-    <div id="content"><!-- rendered in JS --></div>
+    <div id="content">
+        <?php
+            // jvt: render indexable shit for SE-fuckin-O OPTIMI-fuckin-ZATION, motherfucker!
+            switch($state)
+            {
+                case 'contact':
+                    print $data['contactContent'];
+                    break;
+            }
+        ?>
+    </div>
         
     <script type="text/javascript">var lovelyData = <?php print json_encode($data); ?>;</script>
     

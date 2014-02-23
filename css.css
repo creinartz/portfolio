@@ -180,3 +180,29 @@ a:hover {
 .cf:after {
     clear:both;
 }
+
+#contact {
+    padding: 60px 0 0 10%;
+}
+
+#contact h2 {
+    display:block;
+    margin-bottom: 20px;
+    margin-left: -5px;
+}
+
+#contact p, #contact a {
+    font-size: 15px;
+}
+
+#contact p.mb {
+    margin-bottom: 6px;
+}
+
+#contact a.twitter { color: #55ACEE; }
+#contact a.facebook { color: #3B5998; }
+#contact a.flickr { color: #FF0084; }
+#contact a.five00px { color: #000000; }
+#contact a.vimeo { color: #44BBFF; }
+#contact a.mk { color: rgb(96, 24, 28); }
+#contact a.soundcloud { color: rgb(255, 119, 0); }

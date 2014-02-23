@@ -112,6 +112,24 @@
         }
     });
 
+    var ContactView = Backbone.View.extend({
+        events: {
+            'click': 'onClick'
+        }
+
+        , initialize: function(options)
+        {
+            this.options = _.extend({}, options);
+            this.$el.append(this.options.html);
+        }
+
+        , destroy: function()
+        {
+            this.unbind();
+            this.$el.empty();
+        }
+    });
+
     /*** history handling ***/
     function pushToHistory(state)
     {
@@ -141,7 +159,7 @@
     }
 
     /*** state handling ***/
-    function onStateChange(model, state)
+    function onStateChange(model, state, options)
     {
         //console.debug('onStateChange', arguments);
         pushToHistory(state);
@@ -153,16 +171,22 @@
             {
                 destroyViews();
                 $content.empty();
-                displayContent(state);
+                displayContent(state, options);
             });
         }
         else
         {
-            displayContent(state);
+            if(!options.pageLoad && $content.html().length > 0)
+            {
+                destroyViews();
+                $content.empty();
+            }
+
+            displayContent(state, options);
         }
     }
 
-    function displayContent(state)
+    function displayContent(state, options)
     {
         switch(state)
         {
@@ -170,15 +194,19 @@
             case 'studio':
             case 'outdoor':
             case 'event':
-                showImageCategory(state);
+                showImageCategory(state, options);
                 break;
 
             case 'blog':
-                showArticles();
+                showArticles(options);
+                break;
+
+            case 'contact':
+                showContact(options);
                 break;
 
             default:
-                showOverview();
+                showOverview(options);
         }
     }
 
@@ -190,6 +218,17 @@
         });
 
         views = [];
+    }
+
+    function showContact(options)
+    {
+        if(!options.pageLoad)
+        {
+            views.push(new ContactView({
+                el: $content
+                , html: data.contactContent
+            }));
+        }
     }
 
     function showArticles()
@@ -227,6 +266,7 @@
     
     /*** ***/
     var state = new Backbone.Model
+        , data = {}
         , tileTemplate = _.template('<a class="tile hidden <%= cssClass %>" href="<%= href %>"><div><%= content %></div></a>')
         , images = new (Backbone.Collection.extend({ model: ImageModel }))
         , articles = new (Backbone.Collection.extend({ model: ArticleModel }))
@@ -238,7 +278,7 @@
     // jvt: run init on document ready
     $(function()
     {
-        var data = global.lovelyData;
+        data = global.lovelyData;
         images.add(data.images);
         articles.add(data.articles);
 
@@ -255,7 +295,7 @@
         }
 
         state.on('change:state', onStateChange);
-        state.set('state', (data.state || 'overview'));
+        state.set('state', (data.state || 'overview'), { pageLoad: true });
 
         $('#janvt').on('click', function(e)
         {
