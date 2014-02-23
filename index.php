@@ -53,7 +53,6 @@ foreach($articles as $article)
     );
 }
 
-
 if(!empty($url) && !empty($blogHtmlFile) && file_exists($blogHtmlFile)) // jvt: check for valid blog content
 {
     $state = 'blog';

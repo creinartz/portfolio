@@ -195,7 +195,6 @@
                     State.set('url', e.state);
                     //showArticle(s.state);
                     break;
-
             }
         }
     }
@@ -299,7 +298,8 @@
         }
     }
 
-    function showArticle(url)
+    // jvt: @todo (only on page load currently...)
+    /*function showArticle(url)
     {
         var _article = articles.findWhere({ url: url });
         if('undefined' != typeof _article)
@@ -316,7 +316,7 @@
             //console.error('invalid url: ' + url);
             //location.reload(true);
         }
-    }
+    }*/
 
     function showArticles(options)
     {
@@ -343,9 +343,24 @@
     {
         setContentClasses('overview');
         images.reset(images.shuffle(), { silent: true });
-        images.each(function(model) {
+        var i, n, ip = 0, ap = 0;
+        for(i = 0, n = 20; i < n; i++)
+        {
+            // jvt: articles at 1 & 4 @todo random?
+            if((i === 1 || i === 4) && ap < (articles.length))
+            {
+                addView(articles.at(ap), ArticleTileView);
+                ap++;
+            }
+            else
+            {
+                addView(images.at(ip), ImageTileView);
+                ip++;
+            }
+        }
+        /*images.each(function(model) {
             addView(model, ImageTileView);
-        });
+        });*/
     }
 
     function addView(model, View)

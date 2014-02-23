@@ -25,12 +25,6 @@ body {
 	position:absolute;
 }
 
-/* headers have to be inline */
-h2, h3 {
-	display:inline;
-	clear:both;
-}
-
 /* tell images to fit to wrapper */
 img {
     max-width: 100%;
@@ -49,7 +43,7 @@ img {
 	float:left;
 	position: relative;
 	top: 0;
-	/*overflow: hidden;*/
+	overflow: hidden;
 	width: 47%;
 	margin: 20px 3% 0 0;
 	padding-bottom: 32%;
@@ -125,6 +119,10 @@ h1 {
     font-family: Times;
 }
 
+.tile h4 {
+    border-top:1px solid #9C9C9C;
+}
+
 h1 a, h1 a:link, h1 a:visited, h1 a:active {
     color:#000000;
     font-style:italic;
@@ -157,10 +155,6 @@ a:hover {
     -ms-transition: opacity 0.2s ease-in-out;
     -o-transition: opacity 0.2s ease-in-out;
     transition: opacity 0.2s ease-in-out;
-}
-
-.tile.article {
-    border-top:1px solid #9C9C9C;
 }
 
 .tile.hidden {
