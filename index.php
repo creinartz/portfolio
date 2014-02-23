@@ -79,6 +79,7 @@ $data = array(
     <title>janvt</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="content-language" content="EN">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="janvt photography portrait outdoor concert event blog">
     <link rel="shortcut icon" href="hund.ico">
     <link rel="stylesheet" href="css.css" />
