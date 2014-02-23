@@ -7,17 +7,16 @@ if(!file_exists($conf))
 include($conf);
 include('./functions.php');
 
+// jvt: check & parse url
 $url = (isset($_REQUEST['url']) ? $_REQUEST['url'] : '');
 $state = 'overview';
 if(in_array($url, array('portrait', 'studio', 'outdoor', 'event', 'blog', 'contact')))
 {
     $state = $url;
-}
-else if(!empty($url)) // jvt: other content, check if valid
-{
-    $state = 'blog';
+    $url = '';
 }
 
+// jvt: get content
 $contentDir = getProperty('contentDir');
 
 $images = readConfFile($contentDir . getProperty('imagesData'));
@@ -36,13 +35,27 @@ foreach($images as $image)
 }
 
 $articles = readConfFile($contentDir . getProperty('articlesData'));
+$articlesHtmlDir = $contentDir . getProperty('articlesHtmlDir');
 $articlesJSON = array();
+$blogHtmlFile = '';
 foreach($articles as $article)
 {
+    if($url === $article[0])
+    {
+        $blogHtmlFile = $articlesHtmlDir . $article[3];
+    }
+
     $articlesJSON[] = array(
-        'title' => $article[0],
-        'text' => $article[1],
+        'url' => $article[0],
+        'title' => $article[1],
+        'text' => $article[2],
+        'htmlSrc' => $articlesHtmlDir . $article[3]
     );
+}
+
+if(!empty($url) && !empty($blogHtmlFile) && file_exists($blogHtmlFile)) // jvt: check for valid blog content
+{
+    $state = 'blog';
 }
 
 $data = array(
@@ -51,7 +64,7 @@ $data = array(
     'images' => $imagesJSON,
     'articles' => $articlesJSON,
 
-    'contactContent' => file_get_contents(getProperty('contactContentURL'))
+    'contactHtml' => file_get_contents(getProperty('contactContentURL'))
 );
 
 ?>
@@ -83,13 +96,19 @@ $data = array(
         </div>
     </div>
     
-    <div id="content">
+    <div id="content" class="<?php print $state; ?>">
         <?php
             // jvt: render indexable shit for SE-fuckin-O OPTIMI-fuckin-ZATION, motherfucker!
             switch($state)
             {
                 case 'contact':
-                    print $data['contactContent'];
+                    print $data['contactHtml'];
+                    break;
+
+                case 'blog':
+                    if(!empty($blogHtmlFile))
+                        print file_get_contents($blogHtmlFile);
+
                     break;
             }
         ?>

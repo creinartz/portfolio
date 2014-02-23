@@ -44,7 +44,10 @@
         
         , onClick: function(e)
         {
-            this.model.set('state', $(e.currentTarget).data('state'));
+            this.model.set({
+                state: $(e.currentTarget).data('state')
+                , url: '' // jvt: and reset url
+            });
             e.preventDefault();
         }
     });
@@ -57,10 +60,10 @@
             this.remove();
         }
 
-        , render: function()
+        , render: function(href)
         {
             var _$node = $(this.options.tileTemplate({
-                href: '#'
+                href: (href || '#')
                 , content: this.template(this.model.toJSON())
                 , cssClass: this.model.get('cssClass')
             }));
@@ -76,7 +79,7 @@
         }
     });
 
-    var ImageView = TileView.extend({
+    var ImageTileView = TileView.extend({
         template: _.template('<img src="<%= url %>" alt="<%= title %>" title="<%= description %>" />')
 
         , events: {
@@ -91,33 +94,48 @@
 
         , onClick: function()
         {
+            // jvt: @todo
         }
     });
 
-    var ArticleView = TileView.extend({
+    var ArticleTileView = TileView.extend({
         template: _.template('<h2><%= title %></h2><p><%= text %></p>')
-
-        , events: {
-            'click .tile': 'onClick'
-        }
 
         , initialize: function(options)
         {
             this.options = _.extend({}, options);
-            this.render();
+            this.render(this.model.get('url'));
+        }
+    });
+
+    var ArticleView = Backbone.View.extend({
+        initialize: function(options)
+        {
+            this.options = _.extend({}, options);
+            this.load();
         }
 
-        , onClick: function()
+        , load: function()
         {
+            $.ajax({
+                url: this.model.get('htmlSrc')
+                , success: function(html)
+                {
+                    console.debug('load success', arguments);
+                    this.$el.html(html);
+                }
+            });
+        }
+
+        , destroy: function()
+        {
+            this.unbind();
+            this.$el.empty();
         }
     });
 
     var ContactView = Backbone.View.extend({
-        events: {
-            'click': 'onClick'
-        }
-
-        , initialize: function(options)
+        initialize: function(options)
         {
             this.options = _.extend({}, options);
             this.$el.append(this.options.html);
@@ -131,22 +149,27 @@
     });
 
     /*** history handling ***/
-    function pushToHistory(state)
+    function pushToHistory(state, url)
     {
         if(pushStateSupported)
         {
+            var _url = '/' + state
+                , _state = state
+            ;
+
             if('overview' === state)
             {
-                history.pushState(state, '', '/');
+                _url = '/';
             }
             else if('blog' === state)
             {
-                // jvt: @todo
+                _url = (url || state);
+                _state = _url;
+                _url = '/' + _url;
             }
-            else
-            {
-                history.pushState(state, '', '/' + state);
-            }
+
+            //console.debug('push', _state, _url);
+            history.pushState(_state, '', _url);
         }
     }
 
@@ -154,7 +177,23 @@
     {
         if(e.state)
         {
-            state.set('state', e.state);
+            switch(e.state)
+            {
+                case 'portrait':
+                case 'studio':
+                case 'outdoor':
+                case 'event':
+                case 'blog':
+                case 'contact':
+                    State.set('state', e.state);
+                    break;
+
+                default: // jvt: most likely a blog URL
+                    State.set('url', e.state);
+                    //showArticle(s.state);
+                    break;
+
+            }
         }
     }
 
@@ -162,7 +201,8 @@
     function onStateChange(model, state, options)
     {
         //console.debug('onStateChange', arguments);
-        pushToHistory(state);
+        options = options || {};
+        pushToHistory(state, State.get('url'));
 
         var _tiles = $content.find('.tile');
         if(_tiles.length > 0)
@@ -183,6 +223,24 @@
             }
 
             displayContent(state, options);
+        }
+    }
+
+    function onUrlChange(model, url, options)
+    {
+        options = options || {};
+        //console.debug('onUrlChange', arguments);
+        if('blog' === State.get('state'))
+        {
+            if(_.isEmpty(url) && !options.pageLoad)
+            {
+                // jvt: explicitely call change state event
+                onStateChange(null, 'blog');
+            }
+            /*else
+            {
+                showArticle(url);
+            }*/
         }
     }
 
@@ -226,24 +284,45 @@
         {
             views.push(new ContactView({
                 el: $content
-                , html: data.contactContent
+                , html: contactHtml
             }));
         }
     }
 
-    function showArticles()
+    function showArticle(url)
     {
-        articles.each(function(model)
+        var _article = articles.findWhere({ url: url });
+        if('undefined' != typeof _article)
         {
-            addView(model, ArticleView);
-        });
+            views.push(new (ArticleView({
+                el: $content
+                , model: _article
+            })));
+        }
+        else
+        {
+            // jvt: invalid article URL, just reload page
+            console.error('invalid url: ' + url);
+            //location.reload(true);
+        }
+    }
+
+    function showArticles(options)
+    {
+        if((options.pageLoad && !State.get('url')) || !options.pageLoad)
+        {
+            articles.each(function(model)
+            {
+                addView(model, ArticleTileView);
+            });
+        }
     }
 
     function showImageCategory(category)
     {
         var _filteredImages = images.where({ category: category });
         _.each(_filteredImages, function(model) {
-            addView(model, ImageView);
+            addView(model, ImageTileView);
         });
     }
 
@@ -251,7 +330,7 @@
     {
         images.reset(images.shuffle(), { silent: true });
         images.each(function(model) {
-            addView(model, ImageView);
+            addView(model, ImageTileView);
         });
     }
 
@@ -265,8 +344,8 @@
     }
     
     /*** ***/
-    var state = new Backbone.Model
-        , data = {}
+    var State = new Backbone.Model
+        , contactHtml
         , tileTemplate = _.template('<a class="tile hidden <%= cssClass %>" href="<%= href %>"><div><%= content %></div></a>')
         , images = new (Backbone.Collection.extend({ model: ImageModel }))
         , articles = new (Backbone.Collection.extend({ model: ArticleModel }))
@@ -278,15 +357,17 @@
     // jvt: run init on document ready
     $(function()
     {
-        data = global.lovelyData;
+        var data = global.lovelyData;
+        //console.debug('data', data);
         images.add(data.images);
         articles.add(data.articles);
+        contactHtml = data.contactHtml
 
         $content  = $('#content');
 
         new MenuView({
             el: '#links'
-            , model: state
+            , model: State
         });
 
         if(pushStateSupported)
@@ -294,12 +375,18 @@
             global.onpopstate = onPopHistory;
         }
 
-        state.on('change:state', onStateChange);
-        state.set('state', (data.state || 'overview'), { pageLoad: true });
+        State.on('change:state', onStateChange);
+        State.on('change:url', onUrlChange);
+        State.set({
+                state:(data.state || 'overview')
+                , url: data.url
+            }
+            , { pageLoad: true }
+        );
 
         $('#janvt').on('click', function(e)
         {
-            state.set('state', 'overview');
+            State.set('state', 'overview');
             e.preventDefault();
         });
     });
