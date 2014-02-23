@@ -11,9 +11,9 @@ $url = (isset($_REQUEST['url']) ? $_REQUEST['url'] : '');
 $state = 'overview';
 if(in_array($url, array('portrait', 'studio', 'outdoor', 'event', 'blog', 'contact')))
 {
-    $state = 'url';
+    $state = $url;
 }
-else if($url != 'overview') // jvt: other content, check if valid
+else if(!empty($url)) // jvt: other content, check if valid
 {
     $state = 'blog';
 }

@@ -134,14 +134,18 @@
 
     function onPopHistory(e)
     {
-        state.set('state', (e.state || 'overview'));
+        if(e.state)
+        {
+            state.set('state', e.state);
+        }
     }
 
     /*** state handling ***/
     function onStateChange(model, state)
     {
+        //console.debug('onStateChange', arguments);
         pushToHistory(state);
-        
+
         var _tiles = $content.find('.tile');
         if(_tiles.length > 0)
         {
@@ -222,8 +226,7 @@
     }
     
     /*** ***/
-    var state = new Backbone.Model({ state: 'overview' })
-        , router
+    var state = new Backbone.Model
         , tileTemplate = _.template('<a class="tile hidden <%= cssClass %>" href="<%= href %>"><div><%= content %></div></a>')
         , images = new (Backbone.Collection.extend({ model: ImageModel }))
         , articles = new (Backbone.Collection.extend({ model: ArticleModel }))
@@ -246,19 +249,18 @@
             , model: state
         });
 
+        if(pushStateSupported)
+        {
+            global.onpopstate = onPopHistory;
+        }
+
+        state.on('change:state', onStateChange);
+        state.set('state', (data.state || 'overview'));
+
         $('#janvt').on('click', function(e)
         {
             state.set('state', 'overview');
             e.preventDefault();
         });
-
-        // jvt: display initial content
-        onStateChange(null, (data.state || state.get('state')));
-        state.on('change:state', onStateChange);
-
-        if(pushStateSupported)
-        {
-            global.onpopstate = onPopHistory;
-        }
     });
 }(window, jQuery, _, Backbone));
