@@ -7,6 +7,17 @@ if(!file_exists($conf))
 include($conf);
 include('./functions.php');
 
+$url = (isset($_REQUEST['url']) ? $_REQUEST['url'] : '');
+$state = 'overview';
+if(in_array($url, array('portrait', 'studio', 'outdoor', 'event', 'blog', 'contact')))
+{
+    $state = 'url';
+}
+else if($url != 'overview') // jvt: other content, check if valid
+{
+    $state = 'blog';
+}
+
 $contentDir = getProperty('contentDir');
 
 $images = readConfFile($contentDir . getProperty('imagesData'));
@@ -35,6 +46,8 @@ foreach($articles as $article)
 }
 
 $data = array(
+    'state' => $state,
+    'url' => $url,
     'images' => $imagesJSON,
     'articles' => $articlesJSON
 );
@@ -57,7 +70,7 @@ $data = array(
 
 <body>
     <div class="header cf">
-        <h1><a href="http://janvt.com" id="janvt">janvt</a></h1>
+        <h1><a href="http://janvt.com" id="janvt">jan vt</a></h1>
         <div id="links">
             <a href="#" class="contact" data-state="contact">| CONTACT</a>
             <a href="#" class="blog" data-state="blog">| BLOG</a>
@@ -68,12 +81,7 @@ $data = array(
         </div>
     </div>
     
-    <div id="content"></div>
-    <!--a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><p>test text</p></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a>
-    <a class="tile" href="#"><div><h2>link title</h2><p>lots more test text</p></div></a>
-    <a class="tile" href="#"><div><img src="http://farm3.staticflickr.com/2827/12048337836_10dd9c39bd.jpg" /></div></a-->
+    <div id="content"><!-- rendered in JS --></div>
         
     <script type="text/javascript">var lovelyData = <?php print json_encode($data); ?>;</script>
     

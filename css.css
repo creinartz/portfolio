@@ -50,7 +50,7 @@ img {
 	float:left;
 	position: relative;
 	top: 0;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	width: 47%;
 	margin: 20px 3% 0 0;
 	padding-bottom: 32%;
@@ -92,8 +92,11 @@ img {
 h1, h2, h3 { font-size: 2em; }
 p, a { font-size: 1em; line-height: 1.2; }
 
+@media screen and (min-width:600px) {
+    h1 { font-size: 3em; }
+}
 @media screen and (min-width:700px) {
-	h1, h2, h3 { font-size: 3em; }
+    h2, h3 { font-size: 3em; }
 	p, a { font-size: 1.25em; }
     #links a { font-size:1em;}
 }
@@ -124,6 +127,8 @@ h1 {
 
 h1 a, h1 a:link, h1 a:visited, h1 a:active {
     color:#000000;
+    font-style:italic;
+    padding-left:10px;
 }
 
 #links a {
@@ -131,6 +136,10 @@ h1 a, h1 a:link, h1 a:visited, h1 a:active {
     float:right;
     color:#9C9C9C;
     font-weight:lighter;
+}
+
+#links a.current {
+    color: #444444;
 }
 
 a, a:link, a:visited, a:active {
@@ -156,6 +165,12 @@ a:hover {
 
 .tile.hidden {
     opacity:0; /* displayed via JS when content has loaded */
+}
+
+.tile img {
+    -webkit-box-shadow: 2px -2px 27px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 2px -2px 27px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 2px -2px 27px 0px rgba(0, 0, 0, 0.2);
 }
 
 .cf:before, .cf:after {

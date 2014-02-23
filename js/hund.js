@@ -112,9 +112,36 @@
         }
     });
 
+    /*** history handling ***/
+    function pushToHistory(state)
+    {
+        if(pushStateSupported)
+        {
+            if('overview' === state)
+            {
+                history.pushState(state, '', '/');
+            }
+            else if('blog' === state)
+            {
+                // jvt: @todo
+            }
+            else
+            {
+                history.pushState(state, '', '/' + state);
+            }
+        }
+    }
+
+    function onPopHistory(e)
+    {
+        state.set('state', (e.state || 'overview'));
+    }
+
     /*** state handling ***/
     function onStateChange(model, state)
     {
+        pushToHistory(state);
+        
         var _tiles = $content.find('.tile');
         if(_tiles.length > 0)
         {
@@ -196,14 +223,17 @@
     
     /*** ***/
     var state = new Backbone.Model({ state: 'overview' })
+        , router
         , tileTemplate = _.template('<a class="tile hidden <%= cssClass %>" href="<%= href %>"><div><%= content %></div></a>')
         , images = new (Backbone.Collection.extend({ model: ImageModel }))
         , articles = new (Backbone.Collection.extend({ model: ArticleModel }))
         , $content
         , views = []
+        , pushStateSupported = !!(global.history && history.pushState)
     ;
 
-    function init()
+    // jvt: run init on document ready
+    $(function()
     {
         var data = global.lovelyData;
         images.add(data.images);
@@ -223,10 +253,12 @@
         });
 
         // jvt: display initial content
-        onStateChange(null, state.get('state'));
+        onStateChange(null, (data.state || state.get('state')));
         state.on('change:state', onStateChange);
-    }
-    
-    // jvt: run init on document ready
-    $(init);
+
+        if(pushStateSupported)
+        {
+            global.onpopstate = onPopHistory;
+        }
+    });
 }(window, jQuery, _, Backbone));
