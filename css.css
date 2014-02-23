@@ -17,6 +17,7 @@ body {
 	margin: 0 auto;
 	padding: 40px;
 	overflow: hidden;
+    font-family:Helvetica,Sans,Sans-Serif,"Sans Serif",Arial;
 }
 
 /* this positions content in the link containers */
@@ -123,6 +124,7 @@ p, a { font-size: 1em; line-height: 1.2; }
 h1 {
 	padding:0 0 0 4%;
 	float:left;
+    font-family: Times;
 }
 
 h1 a, h1 a:link, h1 a:visited, h1 a:active {
