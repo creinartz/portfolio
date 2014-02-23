@@ -80,10 +80,11 @@
     });
 
     var ImageTileView = TileView.extend({
-        template: _.template('<img src="<%= url %>" alt="<%= title %>" title="<%= description %>" />')
+        template: _.template('<img src="<%= thumbUrl %>" alt="<%= title %>" title="<%= description %>" />')
+        , lightboxTemplate: _.template('<img src="<%= url %>" alt="<%= title %>" title="<%= description %>" />')
 
         , events: {
-            'click .tile': 'onClick'
+            'click img': 'onClick'
         }
         
         , initialize: function(options)
@@ -94,7 +95,17 @@
 
         , onClick: function()
         {
-            // jvt: @todo
+            var _html = this.lightboxTemplate(this.model.toJSON());
+            $(_html).lightbox_me({
+                centered: true
+                , destroyOnClose: true
+                , lightboxSpeed: 'slow'
+                , overlaySpeed: 600
+                , overlayCSS: {
+                    background: 'black'
+                    , opacity: .8
+                }
+            });
         }
     });
 
@@ -108,7 +119,7 @@
         }
     });
 
-    var ArticleView = Backbone.View.extend({
+    /*var ArticleView = Backbone.View.extend({
         initialize: function(options)
         {
             this.options = _.extend({}, options);
@@ -135,7 +146,7 @@
             this.unbind();
             this.$el.empty();
         }
-    });
+    });*/
 
     var ContactView = Backbone.View.extend({
         initialize: function(options)
