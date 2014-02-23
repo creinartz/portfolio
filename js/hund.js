@@ -358,7 +358,7 @@
         for(i = 0, n = 20; i < n; i++)
         {
             // jvt: articles at 1 & 4 @todo random?
-            if((i === 1 || i === 4) && ap < (articles.length))
+            if((i === 1 || i === 4 || i === 10) && ap < (articles.length))
             {
                 addView(articles.at(ap), ArticleTileView);
                 ap++;
