@@ -2,9 +2,8 @@ conf.php
 *.xml
 *.swp
 images
+images_blog
 thumbs
 portfolio_content
-
 *.iml
-
 .idea/.name
