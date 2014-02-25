@@ -83,7 +83,8 @@ img {
 }
 
 /* Font Size Control Media Queries */
-h1, h2, h3, h4 { font-size: 2em; }
+h1, h2, h3 { font-size: 2em; }
+h4 { font-size: 1.4em; }
 p, a { font-size: 1em; line-height: 1.2; }
 
 @media screen and (min-width:600px) {
