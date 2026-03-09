@@ -347,7 +347,7 @@ strong { color: var(--ink); font-weight: 600; }
   letter-spacing: -0.03em;
   color: var(--ink);
   margin-bottom: 2rem;
-  max-width: 10ch;
+  max-width: 18ch;
 }
 
 /* Right-aligned italic — breaks the grid deliberately */
@@ -870,6 +870,8 @@ strong { color: var(--ink); font-weight: 600; }
 
   .hero { padding: 7rem 2rem 5rem; }
   .hero-bg-text { display: none; }   /* watermark hidden on mobile */
+  /* Scale headline proportionally so long words don't overflow at 375px */
+  .hero-headline { font-size: clamp(2.4rem, 12vw, 3.6rem); }
 
   /* Remove rotations on mobile — too cramped */
   .services-grid .service-card:nth-child(n) { transform: none; }
