@@ -433,6 +433,32 @@ strong { color: var(--ink); font-weight: 600; }
 
 .about-text p { max-width: 52ch; }
 
+.about-list {
+  list-style: none;
+  margin: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-width: 52ch;
+}
+
+.about-list li {
+  padding-left: 1.2em;
+  position: relative;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.about-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 0.85em;
+  top: 0.1em;
+}
+
 .about-focus {
   display: flex;
   flex-direction: column;
