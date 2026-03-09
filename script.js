@@ -23,7 +23,7 @@ navLinks.querySelectorAll('a').forEach(link => {
 
 // Scroll reveal
 const revealEls = document.querySelectorAll(
-  '.service-card, .stat, .timeline-item, .about-text, .about-stats, .contact-intro, .contact-email'
+  '.service-card, .highlight-card, .about-text, .about-focus, .contact-intro, .contact-email'
 );
 
 revealEls.forEach((el, i) => {
@@ -39,6 +39,6 @@ const observer = new IntersectionObserver((entries) => {
       observer.unobserve(entry.target);
     }
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.1 });
 
 revealEls.forEach(el => observer.observe(el));
