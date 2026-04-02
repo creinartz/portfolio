@@ -4,14 +4,11 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- Email obfuscation (ROT13) ---
-  document.querySelectorAll('[data-obf]').forEach(el => {
-    const encoded = el.getAttribute('data-obf');
-    const decoded = encoded.replace(/[a-zA-Z]/g, c =>
+  // --- ROT13 decoder (names) ---
+  document.querySelectorAll('[data-name]').forEach(el => {
+    el.textContent = el.getAttribute('data-name').replace(/[a-zA-Z]/g, c =>
       String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26)
     );
-    el.setAttribute('href', `mailto:${decoded}`);
-    el.textContent = decoded;
   });
 
   // --- Year in footer ---
