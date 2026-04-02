@@ -4,6 +4,16 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // --- Email obfuscation (ROT13) ---
+  document.querySelectorAll('[data-obf]').forEach(el => {
+    const encoded = el.getAttribute('data-obf');
+    const decoded = encoded.replace(/[a-zA-Z]/g, c =>
+      String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26)
+    );
+    el.setAttribute('href', `mailto:${decoded}`);
+    el.textContent = decoded;
+  });
+
   // --- Year in footer ---
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
