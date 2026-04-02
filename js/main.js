@@ -4,11 +4,21 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // --- ROT13 decoder (names) ---
+  // --- ROT13 decoder ---
+  const rot13 = s => s.replace(/[a-zA-Z]/g, c =>
+    String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26)
+  );
+
+  // Emails
+  document.querySelectorAll('[data-obf]').forEach(el => {
+    const email = rot13(el.getAttribute('data-obf'));
+    el.setAttribute('href', `mailto:${email}`);
+    el.textContent = email;
+  });
+
+  // Names
   document.querySelectorAll('[data-name]').forEach(el => {
-    el.textContent = el.getAttribute('data-name').replace(/[a-zA-Z]/g, c =>
-      String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26)
-    );
+    el.textContent = rot13(el.getAttribute('data-name'));
   });
 
   // --- Year in footer ---
