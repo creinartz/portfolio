@@ -20,6 +20,11 @@
   --accent-hover: #d09020;
   --accent-warm:  rgba(196, 122, 0, 0.12);
   --accent-border:#8a6000;
+  /* Ambient orbs — same warm family as accent (gold → amber → russet) */
+  --ambient-orb-1: #d09020;
+  --ambient-orb-2: #a65d12;
+  --ambient-orb-3: #8b4a1e;
+  --ambient-particle: rgba(240, 210, 170, 0.4);
   --font-display: 'Syne', sans-serif;
   --font-body:    'DM Sans', sans-serif;
   --radius:       10px;
@@ -53,7 +58,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Subtle grain texture */
+/* Subtle grain texture (above ambient orbs, below page content) */
 body::before {
   content: '';
   position: fixed;
@@ -61,7 +66,112 @@ body::before {
   background-image:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
   pointer-events: none;
+  z-index: 1;
+}
+
+/* ---------- Ambient background (from Hello World example: drifting orbs + particles) ---------- */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
   z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.22;
+  animation: ambient-drift linear infinite;
+}
+
+.ambient-orb-1 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--ambient-orb-1), transparent);
+  top: -200px;
+  left: -150px;
+  animation-duration: 18s;
+}
+
+.ambient-orb-2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--ambient-orb-2), transparent);
+  bottom: -150px;
+  right: -100px;
+  animation-duration: 14s;
+  animation-direction: reverse;
+}
+
+.ambient-orb-3 {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, var(--ambient-orb-3), transparent);
+  top: 40%;
+  left: 50%;
+  animation-duration: 22s;
+  animation-name: ambient-drift-centered;
+}
+
+@keyframes ambient-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  25%  { transform: translate(40px, -30px) scale(1.05); }
+  50%  { transform: translate(-20px, 50px) scale(0.95); }
+  75%  { transform: translate(-50px, -20px) scale(1.08); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes ambient-drift-centered {
+  0%   { transform: translate(-50%, -50%) scale(1); }
+  25%  { transform: translate(calc(-50% + 40px), calc(-50% - 30px)) scale(1.05); }
+  50%  { transform: translate(calc(-50% - 20px), calc(-50% + 50px)) scale(0.95); }
+  75%  { transform: translate(calc(-50% - 50px), calc(-50% - 20px)) scale(1.08); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.ambient-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambient-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--ambient-particle);
+  border-radius: 50%;
+  animation: ambient-float linear infinite;
+}
+
+@keyframes ambient-float {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-orb {
+    animation: none;
+  }
+  .ambient-orb-3 {
+    transform: translate(-50%, -50%);
+  }
+  .ambient-particle {
+    animation: none !important;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+main {
+  position: relative;
+  z-index: 2;
 }
 
 img, svg { display: block; max-width: 100%; }
@@ -552,6 +662,8 @@ section[id] {
 
 /* ---------- FOOTER ---------- */
 .footer {
+  position: relative;
+  z-index: 2;
   border-top: 1px solid var(--border);
   padding: 44px 64px;
 }
