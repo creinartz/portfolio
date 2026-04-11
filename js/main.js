@@ -146,4 +146,24 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   sections.forEach((s) => sectionObserver.observe(s));
+
+  // --- Ambient floating particles (Hello World example) ---
+  if (!reduceMotion) {
+    const particleRoot = document.getElementById('ambient-particles');
+    if (particleRoot) {
+      const count = 40;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'ambient-particle';
+        p.style.left = `${Math.random() * 100}vw`;
+        p.style.animationDuration = `${6 + Math.random() * 12}s`;
+        p.style.animationDelay = `${Math.random() * 15}s`;
+        const size = 1 + Math.random() * 3;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.opacity = String(0.3 + Math.random() * 0.5);
+        particleRoot.appendChild(p);
+      }
+    }
+  }
 });
